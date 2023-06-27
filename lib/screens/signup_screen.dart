@@ -10,6 +10,7 @@ import 'package:instagram_clone/widgets/text_field_input.dart';
 import '../responsive/mobile_sceen_layout.dart';
 import '../responsive/responsive_layout.dart';
 import '../responsive/web_screen_layout.dart';
+import '../utils/global_variables.dart';
 import '../utils/utils.dart';
 import 'login_screen.dart';
 
@@ -89,7 +90,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: MediaQuery.of(context).size.width > webScreenSize
+              ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 3)
+              : const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

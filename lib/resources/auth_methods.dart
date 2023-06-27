@@ -8,6 +8,15 @@ import 'package:instagram_clone/models/user.dart' as model;
 class AuthMethods {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+   Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot documentSnapshot =
+        await _fireStore.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(documentSnapshot);
+  }
   Future<String> signUpUser(
       {required String username,
       required String email,
