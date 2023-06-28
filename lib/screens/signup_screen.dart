@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
@@ -29,6 +30,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoading = false;
   Uint8List? _image;
 
+  void setInitialImage() async {
+    final ByteData bytes = await rootBundle.load('assets/images/user.png');
+    final Uint8List list = bytes.buffer.asUint8List();
+    _image = list;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setInitialImage();
+  }
+
   void signUpUser() async {
     // set loading to true
     setState(() {
@@ -41,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text,
         username: _usernameController.text,
         bio: _bioController.text,
-        profileImage: _image!);
+        file: _image);
     // if string returned is sucess, user has been created
     if (res == "success") {
       setState(() {
@@ -76,6 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _image = im;
     });
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -125,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     bottom: -10,
                     left: 60,
                     child: IconButton(
-                        onPressed: selectImage, 
+                        onPressed: selectImage,
                         icon: const Icon(Icons.add_a_photo)),
                   ),
                 ],
@@ -164,10 +178,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 12,
               ),
               InkWell(
-                mouseCursor: MaterialStateMouseCursor.clickable,
-                onTap: () async {
-                  
-                },
+                //mouseCursor: MaterialStateMouseCursor.clickable,
+                onTap: signUpUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -200,8 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: const Text('Already have an account?'),
                   ),
                   GestureDetector(
-                  
-                     onTap: () => Navigator.of(context).push(
+                    onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const LoginScreen(),
                       ),
